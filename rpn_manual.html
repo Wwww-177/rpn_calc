@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <title>rpn_manual.nim</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🐳</text></svg>">
+  <meta content="text/html; charset=utf-8" http-equiv="content-type">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="nimib 0.3.12" name="generator">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.min.css">
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/pietroppeter/nimib/assets/atom-one-light.css'>
+    <script src="https://cdn.jsdelivr.net/gh/pietroppeter/nimib@main/assets/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+  <style>
+.nb-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nb-small {
+  font-size: 0.8rem;
+}
+button.nb-small {
+  float: right;
+  padding: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+section#source {
+  display:none
+}
+pre > code {
+  font-size: 1.2em;
+}
+.nb-output {
+  line-height: 1.15;
+}
+figure {
+  margin: 2rem 0;
+}
+figcaption {
+  text-align: center;
+}
+  
+</style>
+  
+</head>
+<body>
+<header>
+<div class="nb-box">
+  <span><a href=".">🏡</a></span>
+  <span><code>rpn_manual.nim</code></span>
+  <span></span>
+</div>
+<hr>
+</header><main>
+<h2>RPN 计算器使用说明书</h2>
+<p>本程序为命令行逆波兰（RPN）计算器，支持整数、浮点数、四则运算及扩展数学函数。</p>
+<p>所有输入按「空格」分隔；一行即一次求值，回车得结果。</p>
+<h3>1. 安装与编译</h3>
+<pre><code class="nohighlight hljs nim"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&quot;&quot;
+  git clone https://github.com/yourname/rpn_calc.git
+  cd rpn_calc
+  g++ -std=c++17 rpn_calc.cpp rpn_engine.cpp -o rpn_calc
+  &quot;&quot;&quot;</span></code></pre><pre class="nb-output">  git clone https://github.com/yourname/rpn_calc.git
+  cd rpn_calc
+  g++ -std=c++17 rpn_calc.cpp rpn_engine.cpp -o rpn_calc
+  </pre>
+<h3>2. 启动</h3>
+<pre><code class="nohighlight hljs nim"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&quot;&quot;
+  ./rpn_calc
+  === C++ RPN 计算器 ===
+  支持操作: +  -  *  /  pow  sqrt  fib
+  输入表达式（如 3 4 +），或 q 退出
+  &gt;
+  &quot;&quot;&quot;</span></code></pre><pre class="nb-output">  ./rpn_calc
+  === C++ RPN 计算器 ===
+  支持操作: +  -  *  /  pow  sqrt  fib
+  输入表达式（如 3 4 +），或 q 退出
+  &gt;
+  </pre>
+<h3>3. 基础示例</h3>
+<p>加法</p>
+<pre><code class="nohighlight hljs nim"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 3 4 +</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 7&quot;</span></code></pre><pre class="nb-output">&gt; 3 4 +
+结果: 7</pre>
+<p>乘法结合</p>
+<pre><code class="nohighlight hljs nim"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 2 3 4 * +</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 14&quot;</span></code></pre><pre class="nb-output">&gt; 2 3 4 * +
+结果: 14</pre>
+<p>浮点除法</p>
+<pre><code class="nohighlight hljs nim"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 22 7 /</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 3.14286&quot;</span></code></pre><pre class="nb-output">&gt; 22 7 /
+结果: 3.14286</pre>
+<h3>4. 扩展运算</h3>
+<p>幂运算</p>
+<pre><code class="nohighlight hljs nim"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 2 3 pow</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 8&quot;</span></code></pre><pre class="nb-output">&gt; 2 3 pow
+结果: 8</pre>
+<p>平方根</p>
+<pre><code class="nohighlight hljs nim"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 2 sqrt</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 1.41421&quot;</span></code></pre><pre class="nb-output">&gt; 2 sqrt
+结果: 1.41421</pre>
+<p>斐波那契（第 n 项）</p>
+<pre><code class="nohighlight hljs nim"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 10 fib</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 55&quot;</span></code></pre><pre class="nb-output">&gt; 10 fib
+结果: 55</pre>
+<h3>5. 栈操作与调试</h3>
+<ul>
+<li>连续运算自动复用栈内剩余数据</li>
+<li>输入非法字符或栈空时会提示错误，但程序不崩溃</li>
+<li>随时按 q 或 quit 退出</li>
+</ul>
+<h3>6. 错误提示对照表</h3>
+<p>| 错误信息 | 含义 |</p>
+<p>|---|---|</p>
+<p>| stack underflow | 运算符需要的操作数不足 |</p>
+<p>| divide by zero | 除零 |</p>
+<p>| sqrt of negative | 对负数开方 |</p>
+<p>| fib index must &gt;= 0 | 斐波那契下标为负 |</p>
+<h3>7. 批量模式（重定向）</h3>
+<p>支持管道一次计算多行：</p>
+<pre><code class="nohighlight hljs nim"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;echo -e </span><span class="hljs-meta">\&quot;</span><span class="hljs-string">3 4 +</span><span class="hljs-meta">\\</span><span class="hljs-string">n2 pow</span><span class="hljs-meta">\&quot;</span><span class="hljs-string"> | ./rpn_calc&quot;</span></code></pre><pre class="nb-output">echo -e &quot;3 4 +\n2 pow&quot; | ./rpn_calc</pre>
+<h3>8. 常见问题</h3>
+<ul>
+<li><strong>Q：必须空格分隔？</strong> A：是的，Tab/多个空格也可。</li>
+</ul>
+<ul>
+<li><strong>Q：支持负数？</strong> A：支持，如 <code>-5 2 +</code> 得 -3。</li>
+</ul>
+<ul>
+<li><strong>Q：括号怎么打？</strong> A：RPN 无需括号，靠顺序即隐含优先级。</li>
+</ul>
+<h3>9. 源码与更新</h3>
+<p>开源地址：<a href="https://github.com/yourname/rpn_calc">https://github.com/yourname/rpn_calc</a></p>
+<p>提交 Issue 欢迎反馈 bug 或新功能需求。</p>
+</main>
+<footer>
+<div class="nb-box">
+  <span><span class="nb-small">made with <a href="https://pietroppeter.github.io/nimib/">nimib 🐳</a></span></span>
+  <span></span>
+  <span><button class="nb-small" id="show" onclick="toggleSourceDisplay()">Show Source</button></span>
+</div>
+</footer>
+<section id="source">
+<pre><code class="nohighlight nim hljs"><span class="hljs-keyword">import</span> nimib
+
+nbInit()
+nbText: <span class="hljs-string">&quot;## RPN 计算器使用说明书&quot;</span>
+nbText: <span class="hljs-string">&quot;本程序为命令行逆波兰（RPN）计算器，支持整数、浮点数、四则运算及扩展数学函数。&quot;</span>
+nbText: <span class="hljs-string">&quot;所有输入按「空格」分隔；一行即一次求值，回车得结果。&quot;</span>
+
+nbText: <span class="hljs-string">&quot;### 1. 安装与编译&quot;</span>
+nbCode:
+  <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&quot;&quot;
+  git clone https://github.com/yourname/rpn_calc.git
+  cd rpn_calc
+  g++ -std=c++17 rpn_calc.cpp rpn_engine.cpp -o rpn_calc
+  &quot;&quot;&quot;</span>
+
+nbText: <span class="hljs-string">&quot;### 2. 启动&quot;</span>
+nbCode:
+  <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&quot;&quot;
+  ./rpn_calc
+  === C++ RPN 计算器 ===
+  支持操作: +  -  *  /  pow  sqrt  fib
+  输入表达式（如 3 4 +），或 q 退出
+  &gt;
+  &quot;&quot;&quot;</span>
+
+nbText: <span class="hljs-string">&quot;### 3. 基础示例&quot;</span>
+nbText: <span class="hljs-string">&quot;加法&quot;</span>
+nbCode: <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 3 4 +</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 7&quot;</span>
+
+nbText: <span class="hljs-string">&quot;乘法结合&quot;</span>
+nbCode: <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 2 3 4 * +</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 14&quot;</span>
+
+nbText: <span class="hljs-string">&quot;浮点除法&quot;</span>
+nbCode: <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 22 7 /</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 3.14286&quot;</span>
+
+nbText: <span class="hljs-string">&quot;### 4. 扩展运算&quot;</span>
+nbText: <span class="hljs-string">&quot;幂运算&quot;</span>
+nbCode: <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 2 3 pow</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 8&quot;</span>
+
+nbText: <span class="hljs-string">&quot;平方根&quot;</span>
+nbCode: <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 2 sqrt</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 1.41421&quot;</span>
+
+nbText: <span class="hljs-string">&quot;斐波那契（第 n 项）&quot;</span>
+nbCode: <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&gt; 10 fib</span><span class="hljs-meta">\n</span><span class="hljs-string">结果: 55&quot;</span>
+
+nbText: <span class="hljs-string">&quot;### 5. 栈操作与调试&quot;</span>
+nbText: <span class="hljs-string">&quot;- 连续运算自动复用栈内剩余数据  </span><span class="hljs-meta">\n</span><span class="hljs-string">- 输入非法字符或栈空时会提示错误，但程序不崩溃  </span><span class="hljs-meta">\n</span><span class="hljs-string">- 随时按 q 或 quit 退出&quot;</span>
+
+nbText: <span class="hljs-string">&quot;### 6. 错误提示对照表&quot;</span>
+nbText: <span class="hljs-string">&quot;| 错误信息 | 含义 |&quot;</span>
+nbText: <span class="hljs-string">&quot;|---|---|&quot;</span>
+nbText: <span class="hljs-string">&quot;| stack underflow | 运算符需要的操作数不足 |&quot;</span>
+nbText: <span class="hljs-string">&quot;| divide by zero | 除零 |&quot;</span>
+nbText: <span class="hljs-string">&quot;| sqrt of negative | 对负数开方 |&quot;</span>
+nbText: <span class="hljs-string">&quot;| fib index must &gt;= 0 | 斐波那契下标为负 |&quot;</span>
+
+nbText: <span class="hljs-string">&quot;### 7. 批量模式（重定向）&quot;</span>
+nbText: <span class="hljs-string">&quot;支持管道一次计算多行：&quot;</span>
+nbCode: <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;echo -e </span><span class="hljs-meta">\&quot;</span><span class="hljs-string">3 4 +</span><span class="hljs-meta">\\</span><span class="hljs-string">n2 pow</span><span class="hljs-meta">\&quot;</span><span class="hljs-string"> | ./rpn_calc&quot;</span>
+
+nbText: <span class="hljs-string">&quot;### 8. 常见问题&quot;</span>
+nbText: <span class="hljs-string">&quot;- **Q：必须空格分隔？** A：是的，Tab/多个空格也可。  </span><span class="hljs-meta">\n</span><span class="hljs-string">&quot;</span>
+nbText: <span class="hljs-string">&quot;- **Q：支持负数？** A：支持，如 `-5 2 +` 得 -3。  </span><span class="hljs-meta">\n</span><span class="hljs-string">&quot;</span>
+nbText: <span class="hljs-string">&quot;- **Q：括号怎么打？** A：RPN 无需括号，靠顺序即隐含优先级。&quot;</span>
+
+nbText: <span class="hljs-string">&quot;### 9. 源码与更新&quot;</span>
+nbText: <span class="hljs-string">&quot;开源地址：[https://github.com/yourname/rpn_calc](https://github.com/yourname/rpn_calc)  </span><span class="hljs-meta">\n</span><span class="hljs-string">&quot;</span>
+nbText: <span class="hljs-string">&quot;提交 Issue 欢迎反馈 bug 或新功能需求。&quot;</span>
+
+nbSave()
+</code></pre>
+</section><script>
+function toggleSourceDisplay() {
+  var btn = document.getElementById("show")
+  var source = document.getElementById("source");
+  if (btn.innerHTML=="Show Source") {
+    btn.innerHTML = "Hide Source";
+    source.style.display = "block";
+  } else {
+    btn.innerHTML = "Show Source";
+    source.style.display = "none";
+  }
+}
+</script></body>
+</html>
