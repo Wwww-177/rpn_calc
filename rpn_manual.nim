@@ -5,7 +5,7 @@ nbText: "## RPN 计算器使用说明书"
 nbText: "本程序为命令行逆波兰（RPN）计算器，支持整数、浮点数、四则运算及扩展数学函数。"
 nbText: "所有输入按「空格」分隔；一行即一次求值，回车得结果。"
 
-nbText: "### 1. 安装与编译666"
+nbText: "### 1. 安装与编译"
 nbCode:
   echo """
   git clone https://github.com/yourname/rpn_calc.git
